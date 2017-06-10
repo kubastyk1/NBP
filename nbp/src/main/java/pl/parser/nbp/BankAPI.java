@@ -5,10 +5,11 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 public class BankAPI {
+
+	private Map<Integer, ArrayList<Double>> rents;
 
 	public void makeRequest(Currency currency, String startDate, String endDate){
 		try{
@@ -22,15 +23,9 @@ public class BankAPI {
 
 			InputStream stream = connection.getInputStream();
 			XMLParser xmlParser = new XMLParser(stream);
-			Map<Integer, ArrayList> rents = xmlParser.getRents();
+			rents = xmlParser.getRents();
 
-			for(Object d : rents.get(1)){
-				System.out.println(d);
-			}
-
-			for(Object d : rents.get(2)){
-				System.out.println("l" + d);
-			}
+			printRents();
 
 		}catch(IOException e){
 			e.printStackTrace();
@@ -46,5 +41,16 @@ public class BankAPI {
 
 
 		return 0;
+	}
+
+	private void printRents(){
+
+		for(Object d : rents.get(1)){
+			System.out.println(d);
+		}
+
+		for(Object d : rents.get(2)){
+			System.out.println("l" + d);
+		}
 	}
 }

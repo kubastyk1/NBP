@@ -25,11 +25,11 @@ public class XMLParser {
 		this.stream = stream;
 	}
 
-	public Map<Integer, ArrayList> getRents(){
+	public Map<Integer, ArrayList<Double>> getRents(){
 
-		Map<Integer, ArrayList> map = new HashMap();
-		List<Double> buyRents = new ArrayList<Double>();
-		List<Double> sellRents = new ArrayList<Double>();
+		Map<Integer, ArrayList<Double>> map = new HashMap<Integer, ArrayList<Double>>();
+		ArrayList<Double> buyRents = new ArrayList<Double>();
+		ArrayList<Double> sellRents = new ArrayList<Double>();
 
 		try {
 			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
@@ -53,8 +53,8 @@ public class XMLParser {
 			}
 
 
-			map.put(1, (ArrayList) buyRents);
-			map.put(2, (ArrayList) sellRents);
+			map.put(1, buyRents);
+			map.put(2, sellRents);
 
 		} catch (ParserConfigurationException e) {
 			e.printStackTrace();

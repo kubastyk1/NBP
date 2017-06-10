@@ -8,7 +8,6 @@ import java.util.Scanner;
 public class ExchangeManager {
 
 	private Scanner reader;
-	private SimpleDateFormat dateFormat;
 	private BankAPI bankAPI;
 	private Currency currencyCode;
 	private String startDate;
@@ -17,7 +16,6 @@ public class ExchangeManager {
 
 	public ExchangeManager(){
 		reader = new Scanner(System.in);
-		dateFormat = new SimpleDateFormat("dd-MM-yyyy");
 		bankAPI = new BankAPI();
 	}
 
@@ -55,14 +53,16 @@ public class ExchangeManager {
 	}
 
 	public String getDateFromUser(){
-		Date date = new Date();
+		String newDate = null;
 		message = reader.next();
 		try {
-			date = dateFormat.parse(message);
+			Date date = new SimpleDateFormat("yyyy-MM-dd").parse(message);
+			newDate = new SimpleDateFormat("yyyy-MM-dd").format(date);
+			System.out.println(newDate);
 		} catch (ParseException e) {
 			System.out.println("Bad date Format! Write proper date format: (YYYY-MM-DD)");
 			getDateFromUser();
 		}
-		return message;
+		return newDate;
 	}
 }

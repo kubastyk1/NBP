@@ -9,9 +9,10 @@ public class ExchangeManager {
 
 	private Scanner reader;
 	private SimpleDateFormat dateFormat;
-	private String currencyCode;
+	private Currency currencyCode;
 	private Date startDate;
 	private Date endDate;
+	private String message;
 
 	public ExchangeManager(){
 		reader = new Scanner(System.in);
@@ -21,7 +22,7 @@ public class ExchangeManager {
 	public void start(){
 		while(true){
 			System.out.println("Write currency code: (USD, EUR, CHF, GBP)");
-			currencyCode = reader.next();
+			currencyCode = getCurrencyFromUser();
 			System.out.println("Write start date: (YYYY-MM-DD)");
 			startDate = getDateFromUser();
 			System.out.println("Write end date: (YYYY-MM-DD)");
@@ -29,9 +30,31 @@ public class ExchangeManager {
 		}
 	}
 
+	public Currency getCurrencyFromUser(){
+
+		message = reader.next();
+		message.toUpperCase();
+
+		if(!isCurrency(message)){
+			System.out.println("Bad currency code! Write proper currency code: (USD, EUR, CHF, GBP)");
+			getCurrencyFromUser();
+		}
+
+		return Currency.valueOf(message);
+	}
+
+	public boolean isCurrency(String message){
+		for(Currency currency : Currency.values()){
+			if(message.equals(currency.name())){
+				return true;
+			}
+		}
+		return false;
+	}
+
 	public Date getDateFromUser(){
 		Date date = new Date();
-		String message = reader.next();
+		message = reader.next();
 		try {
 			date = dateFormat.parse(message);
 		} catch (ParseException e) {

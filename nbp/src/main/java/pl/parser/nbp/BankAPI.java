@@ -34,13 +34,32 @@ public class BankAPI {
 
 	public double getMeanBuyRent(){
 
-		return 0;
+		double sum = 0;
+
+		for(double d : rents.get(1)){
+			sum += d;
+		}
+		return sum/rents.get(1).size();
 	}
 
 	public double getStandardDeviationSellRent(){
 
+		double sum = 0;
+		double mean = 0;
+		double variance = 0;
 
-		return 0;
+		for(double d : rents.get(2)){
+			sum += d;
+		}
+		mean = sum/rents.get(2).size();
+		sum = 0;
+
+		for(double d : rents.get(2)){
+			sum += Math.pow(d-mean, 2);
+		}
+		variance = sum / rents.get(2).size();
+
+		return Math.sqrt(variance);
 	}
 
 	private void printRents(){

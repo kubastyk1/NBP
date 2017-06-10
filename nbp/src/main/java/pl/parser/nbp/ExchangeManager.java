@@ -9,14 +9,16 @@ public class ExchangeManager {
 
 	private Scanner reader;
 	private SimpleDateFormat dateFormat;
+	private BankAPI bankAPI;
 	private Currency currencyCode;
-	private Date startDate;
-	private Date endDate;
+	private String startDate;
+	private String endDate;
 	private String message;
 
 	public ExchangeManager(){
 		reader = new Scanner(System.in);
 		dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+		bankAPI = new BankAPI();
 	}
 
 	public void start(){
@@ -27,13 +29,13 @@ public class ExchangeManager {
 			startDate = getDateFromUser();
 			System.out.println("Write end date: (YYYY-MM-DD)");
 			endDate = getDateFromUser();
+			bankAPI.makeRequest(Currency.EUR, startDate, endDate);
 		}
 	}
 
 	public Currency getCurrencyFromUser(){
-
 		message = reader.next();
-		message.toUpperCase();
+		message = message.toUpperCase();
 
 		if(!isCurrency(message)){
 			System.out.println("Bad currency code! Write proper currency code: (USD, EUR, CHF, GBP)");
@@ -52,7 +54,7 @@ public class ExchangeManager {
 		return false;
 	}
 
-	public Date getDateFromUser(){
+	public String getDateFromUser(){
 		Date date = new Date();
 		message = reader.next();
 		try {
@@ -61,6 +63,6 @@ public class ExchangeManager {
 			System.out.println("Bad date Format! Write proper date format: (YYYY-MM-DD)");
 			getDateFromUser();
 		}
-		return date;
+		return message;
 	}
 }

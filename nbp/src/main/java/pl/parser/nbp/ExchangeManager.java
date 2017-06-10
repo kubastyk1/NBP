@@ -28,6 +28,8 @@ public class ExchangeManager {
 			System.out.println("Write end date: (YYYY-MM-DD)");
 			endDate = getDateFromUser();
 			bankAPI.makeRequest(Currency.EUR, startDate, endDate);
+			System.out.println("Mean buy rent: " + bankAPI.getMeanBuyRent());
+			System.out.println("Standard deviation sell rent: " + bankAPI.getStandardDeviationSellRent());
 		}
 	}
 
@@ -58,7 +60,6 @@ public class ExchangeManager {
 		try {
 			Date date = new SimpleDateFormat("yyyy-MM-dd").parse(message);
 			newDate = new SimpleDateFormat("yyyy-MM-dd").format(date);
-			System.out.println(newDate);
 		} catch (ParseException e) {
 			System.out.println("Bad date Format! Write proper date format: (YYYY-MM-DD)");
 			getDateFromUser();

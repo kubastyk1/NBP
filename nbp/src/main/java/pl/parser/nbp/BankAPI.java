@@ -25,8 +25,6 @@ public class BankAPI {
 			XMLParser xmlParser = new XMLParser(stream);
 			rents = xmlParser.getRents();
 
-			printRents();
-
 		}catch(IOException e){
 			e.printStackTrace();
 		}
@@ -48,12 +46,14 @@ public class BankAPI {
 		double mean = 0;
 		double variance = 0;
 
+		//Count mean value
 		for(double d : rents.get(2)){
 			sum += d;
 		}
 		mean = sum/rents.get(2).size();
-		sum = 0;
 
+		//Count variance value
+		sum = 0;
 		for(double d : rents.get(2)){
 			sum += Math.pow(d-mean, 2);
 		}

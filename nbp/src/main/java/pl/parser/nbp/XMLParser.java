@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -19,7 +18,10 @@ import org.xml.sax.SAXException;
 
 public class XMLParser {
 
-	InputStream stream;
+	private InputStream stream;
+	private Map<Integer, ArrayList<Double>> map = new HashMap<Integer, ArrayList<Double>>();
+	private ArrayList<Double> buyRents = new ArrayList<Double>();
+	private ArrayList<Double> sellRents = new ArrayList<Double>();
 
 	public XMLParser(InputStream stream){
 		this.stream = stream;
@@ -27,31 +29,13 @@ public class XMLParser {
 
 	public Map<Integer, ArrayList<Double>> getRents(){
 
-		Map<Integer, ArrayList<Double>> map = new HashMap<Integer, ArrayList<Double>>();
-		ArrayList<Double> buyRents = new ArrayList<Double>();
-		ArrayList<Double> sellRents = new ArrayList<Double>();
-
 		try {
 			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 			DocumentBuilder db = dbf.newDocumentBuilder();
 			Document doc = db.parse(stream);
 
-			NodeList nList = doc.getElementsByTagName("Bid");
-
-			for (int temp = 0; temp < nList.getLength(); temp++) {
-				Node nNode = nList.item(temp);
-				Element eElement = (Element) nNode;
-				buyRents.add(Double.parseDouble(eElement.getTextContent()));
-			}
-
-			NodeList nList2 = doc.getElementsByTagName("Ask");
-
-			for (int temp = 0; temp < nList2.getLength(); temp++) {
-				Node nNode = nList2.item(temp);
-				Element eElement = (Element) nNode;
-				sellRents.add(Double.parseDouble(eElement.getTextContent()));
-			}
-
+			getBuyRent(doc);
+			getSellRent(doc);
 
 			map.put(1, buyRents);
 			map.put(2, sellRents);
@@ -65,6 +49,26 @@ public class XMLParser {
 		}
 
 		return map;
+	}
+
+	private void getSellRent(Document doc){
+		NodeList nList = doc.getElementsByTagName("Ask");
+
+		for (int temp = 0; temp < nList.getLength(); temp++) {
+			Node nNode = nList.item(temp);
+			Element eElement = (Element) nNode;
+			buyRents.add(Double.parseDouble(eElement.getTextContent()));
+		}
+	}
+
+	private void getBuyRent(Document doc){
+		NodeList nList = doc.getElementsByTagName("Bid");
+
+		for (int temp = 0; temp < nList.getLength(); temp++) {
+			Node nNode = nList.item(temp);
+			Element eElement = (Element) nNode;
+			sellRents.add(Double.parseDouble(eElement.getTextContent()));
+		}
 	}
 
 }

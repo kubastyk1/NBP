@@ -19,12 +19,13 @@ import org.xml.sax.SAXException;
 public class XMLParser {
 
 	private InputStream stream;
-	private Map<Integer, ArrayList<Double>> map = new HashMap<Integer, ArrayList<Double>>();
-	private ArrayList<Double> buyRents = new ArrayList<Double>();
-	private ArrayList<Double> sellRents = new ArrayList<Double>();
+	private Map<Integer, ArrayList<Double>> map;
+	private ArrayList<Double> buyRents;
+	private ArrayList<Double> sellRents;
 
 	public XMLParser(InputStream stream){
 		this.stream = stream;
+		map = new HashMap<Integer, ArrayList<Double>>();
 	}
 
 	public Map<Integer, ArrayList<Double>> getRents(){
@@ -34,8 +35,8 @@ public class XMLParser {
 			DocumentBuilder db = dbf.newDocumentBuilder();
 			Document doc = db.parse(stream);
 
-			getBuyRent(doc);
-			getSellRent(doc);
+			sellRents = getRentFromNodes(doc, "Bid");
+			buyRents = getRentFromNodes(doc, "Ask");
 
 			map.put(1, buyRents);
 			map.put(2, sellRents);
@@ -51,24 +52,17 @@ public class XMLParser {
 		return map;
 	}
 
-	private void getSellRent(Document doc){
-		NodeList nList = doc.getElementsByTagName("Ask");
+	private ArrayList<Double> getRentFromNodes(Document doc, String nodeName){
+		ArrayList<Double> rents = new ArrayList<Double>();
+		NodeList nList = doc.getElementsByTagName(nodeName);
 
 		for (int temp = 0; temp < nList.getLength(); temp++) {
 			Node nNode = nList.item(temp);
 			Element eElement = (Element) nNode;
-			buyRents.add(Double.parseDouble(eElement.getTextContent()));
+			rents.add(Double.parseDouble(eElement.getTextContent()));
 		}
-	}
 
-	private void getBuyRent(Document doc){
-		NodeList nList = doc.getElementsByTagName("Bid");
-
-		for (int temp = 0; temp < nList.getLength(); temp++) {
-			Node nNode = nList.item(temp);
-			Element eElement = (Element) nNode;
-			sellRents.add(Double.parseDouble(eElement.getTextContent()));
-		}
+		return rents;
 	}
 
 }
